@@ -1,0 +1,26 @@
+<!-- Container do Chatbot -->
+    <div class="chatbot-container">
+        <div class="chatbot-button" (click)="openChatbot()">
+            <i class="fas fa-comment"></i>
+            <span class="chatbot-notification">1</span>
+        </div>
+        <div class="chatbot-window" [class.show]="showChatbot">
+            <div class="chatbot-header">
+                <h4>Assistente Virtual</h4>
+                <button class="chatbot-close" (click)="closeChatbot()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div class="chatbot-messages" id="chatbot-messages">
+                <div class="message bot-message">
+                    <p>Olá! Sou a assistente virtual do Crigina Hair. Como posso ajudá-la hoje?</p>
+                </div>
+            </div>
+            <div class="chatbot-input">
+                <input type="text" id="chatbot-input" placeholder="Digite sua mensagem...">
+                <button id="chatbot-send">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
