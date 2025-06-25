@@ -39,7 +39,7 @@
   
   .service-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.2);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
   }
   
   .service-icon {

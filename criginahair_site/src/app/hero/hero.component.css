@@ -3,7 +3,7 @@
     min-height: 100vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, #f8f8f8 0%, #e8b4b8 100%);    
+    background: linear-gradient(135deg, #ffffff 0%, #F5E6E1  100%);    
     padding: var(--spacing-xl) 0;
     position: relative;
     overflow: hidden;
@@ -76,7 +76,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 20px 40px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
     animation: float 6s ease-in-out infinite;
   }
   

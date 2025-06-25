@@ -1,17 +1,18 @@
 /* ===== VARIÁVEIS CSS ===== */
 :root {
-  /* Cores principais - Paleta refinada e feminina */
-  --primary-color: #d4af37; /* Dourado elegante */
-  --secondary-color: #8b4b8c; /* Roxo sofisticado */
-  --accent-color: #e8b4b8; /* Rosa suave */
-  --dark-color: #2c2c2c; /* Cinza escuro */
-  --light-color: #f8f8f8; /* Branco suave */
-  --text-color: #333333; /* Texto principal */
-  --text-light: #666666; /* Texto secundário */
-  --border-color: #e0e0e0; /* Bordas */
-  --shadow-color: rgba(0, 0, 0, 0.1); /* Sombras */
+  /* Paleta de Cores Crigina Hair */
+  --primary-color: #D5B8A2; /* Bege rosé - botões, destaques, hover */
+  --secondary-color: #E7CBA6; /* Dourado suave - bordas, hover, ícones, detalhes */
+  --accent-color: #E7CBA6; /* Dourado suave - detalhes */
+  --background-main: #F7EFE7; /* Champanhe claro - fundo principal */
+  --background-contrast: #FAFAFA; /* Branco gelo - fundo de seções */
+  --text-color: #2E2E2E; /* Cinza grafite - títulos, textos principais */
+  --text-secondary: #B0B0B0; /* Cinza claro - textos secundários */
+  --border-color: #E7CBA6; /* Dourado suave - bordas */
+  --shadow-color: rgba(0,0,0,0.15); /* Sombra preta neutra */
   
   /* Gradientes */
+  --gradient-background: linear-gradient(135deg, #F7EFE7 0%, #FAFAFA 100%);
   --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
   --gradient-secondary: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
  
@@ -83,12 +84,12 @@ body {
 .btn-primary {
   background: var(--gradient-primary);
   color: white;
-  box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+  box-shadow: 0 4px 15px rgba(0,0,0,0.15);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.20);
 }
 
 .btn-secondary {
@@ -161,7 +162,7 @@ body {
 
 .scroll-top:hover {
   transform: translateY(-3px);
-  box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.20);
 }
 
 /* ===== ANIMAÇÕES ===== */
@@ -198,13 +199,13 @@ body {
 
 @keyframes pulse {
   0% {
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   }
   50% {
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.6);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.30);
   }
   100% {
-    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
   }
 }
 
@@ -408,4 +409,34 @@ body {
 
 .h-100 {
   height: 100%;
+}
+
+.service-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.20);
+}
+
+.social-link:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 5px 15px rgba(0,0,0,0.20);
+}
+
+.chatbot-button {
+  width: 60px;
+  height: 60px;
+  background: var(--gradient-primary);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  position: relative;
+  animation: pulse 2s infinite;
+}
+
+.chatbot-button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 25px rgba(0,0,0,0.20);
 }
