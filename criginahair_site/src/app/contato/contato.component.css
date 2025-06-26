@@ -2,12 +2,18 @@
 .contact {
     padding: var(--spacing-xl) 0;
     background: var(--light-color);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
   }
   
   .contact-content {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
+    flex-direction: row;
     gap: var(--spacing-xl);
+    align-items: center;
+    justify-content: center;
   }
   
   .contact-info {
