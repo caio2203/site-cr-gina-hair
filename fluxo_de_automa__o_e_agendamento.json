@@ -1,0 +1,803 @@
+{
+  "name": "fluxo de automação e agendamento",
+  "nodes": [
+    {
+      "parameters": {
+        "path": "mensagem-whatsapp",
+        "responseMode": "lastNode",
+        "options": {}
+      },
+      "id": "4144a25c-4c48-4e24-aa53-268c70c86c58",
+      "name": "Receber Mensagem WhatsApp",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 1,
+      "position": [
+        920,
+        480
+      ],
+      "webhookId": "9cee6d38-ab52-4d63-8384-6a1ef51e7c32"
+    },
+    {
+      "parameters": {
+        "operation": "getAll",
+        "calendar": "primary",
+        "options": {}
+      },
+      "id": "470db0b3-9221-40e5-b743-35d8d88d9a6a",
+      "name": "Buscar Eventos Google",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        1640,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "delete",
+        "calendar": "primary",
+        "options": {}
+      },
+      "id": "86903b2b-b304-4928-b039-f76df852f373",
+      "name": "Cancelar Evento",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.ultramsg.com/INSTANCE_ID_AQUI/messages/chat",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        }
+      },
+      "id": "fe100719-c2cf-427e-bf77-193d8ec2533f",
+      "name": "Enviar Confirmação Cancelamento",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2020,
+        240
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "",
+          "__regex": "(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)"
+        },
+        "timeMin": "=Time Min: {{ $json[\"horario_sugerido\"] }}",
+        "timeMax": "=Time Max: {{ new Date(new Date($json[\"horario_sugerido\"]).getTime() + 60 * 60 * 1000).toISOString() }}",
+        "options": {}
+      },
+      "id": "fdb4b934-3daf-40f4-8edf-933ba9a15ab1",
+      "name": "Verificar Disponibilidade",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "const mensagem = $json[\"mensagem\"];\nconst match = mensagem.match(/remarcar.*?(\\d{1,2})h/);\nif (match) {\n  const hora = parseInt(match[1]);\n  const novaData = new Date();\n  novaData.setHours(hora, 0, 0, 0);\n  return [{ novoHorario: novaData.toISOString() }];\n} else {\n  return [{ erro: \"Horário inválido ou não encontrado\" }];\n}"
+      },
+      "id": "2ab4d372-39bc-4e9a-aab9-890677655502",
+      "name": "Extrair Novo Horário",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        1620,
+        460
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": "primary",
+        "start": "={{$json[\"data\"]}}",
+        "end": "={{$json[\"data\"]}}",
+        "additionalFields": {}
+      },
+      "id": "31bc872f-6a80-4793-989c-6a143cae574b",
+      "name": "Criar Evento Google Calendar1",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        2260,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.ultramsg.com/INSTANCE_ID_AQUI/messages/chat",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        }
+      },
+      "id": "df405a76-ef31-4080-b72c-802a2f3b83a1",
+      "name": "Escolha outro horario, esse está ocupado",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1820,
+        680
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2096abc7-7ba9-4f0c-a09a-cbc88026ef69",
+              "leftValue": "={{ $json[\"items\"].length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        2000,
+        460
+      ],
+      "id": "ac400995-c89b-42a0-9df0-263199394e24",
+      "name": "If"
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "6cfde014-89e6-4a96-a420-4df217958d8a",
+                    "leftValue": "={{ $json[\"mensagem\"] }}",
+                    "rightValue": "cancelar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cancelar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "4b195c20-5399-45d0-9bbf-0713081cace0",
+                    "leftValue": "={{ $json[\"mensagem\"] }}",
+                    "rightValue": "remarcar",
+                    "operator": {
+                      "type": "string",
+                      "operation": "contains"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "remarcar"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "2905f5ec-c357-4c39-b156-5cef67d2d63a",
+                    "leftValue": "",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "agendar novo"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 2
+                },
+                "conditions": [
+                  {
+                    "id": "9ed36a51-049d-47aa-96cc-f0ee9b93dc0e",
+                    "leftValue": "tira dúvidas",
+                    "rightValue": "",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals",
+                      "name": "filter.operator.equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.2,
+      "position": [
+        1340,
+        480
+      ],
+      "id": "5d03447a-dce5-4bc3-97de-a9ac0ef7b190",
+      "name": "Switch"
+    },
+    {
+      "parameters": {
+        "url": "https://api.ultramsg.com/INSTANCE_ID_AQUI/messages/chat",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        }
+      },
+      "id": "d8dc551e-37c8-42f8-ae2a-0d1531c46eca",
+      "name": "Enviar WhatsApp",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        1340,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": "primary",
+        "start": "={{$json[\"data\"]}}",
+        "end": "={{$json[\"data\"]}}",
+        "additionalFields": {}
+      },
+      "id": "c4436a4d-c712-4469-97a9-a5d2a0d0adff",
+      "name": "Criar Evento Google Calendar",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        1160,
+        940
+      ]
+    },
+    {
+      "parameters": {
+        "url": "https://api.ultramsg.com/INSTANCE_ID_AQUI/messages/chat",
+        "options": {}
+      },
+      "id": "985f91a5-ebb2-49ac-8088-bc3f723147ff",
+      "name": "Enviar Confirmação Remarcação",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        2620,
+        660
+      ]
+    },
+    {
+      "parameters": {
+        "resource": "calendar",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "",
+          "__regex": "(^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*)"
+        },
+        "timeMin": "=Time Min: {{ $json[\"horario_sugerido\"] }}",
+        "timeMax": "=Time Max: {{ new Date(new Date($json[\"horario_sugerido\"]).getTime() + 60 * 60 * 1000).toISOString() }}",
+        "options": {}
+      },
+      "id": "870ddd14-3f42-4ebc-a81e-5de23c5e1459",
+      "name": "Verificar Disponibilidade1",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        1080,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "functionCode": "const mensagem = $json[\"mensagem\"];\nconst match = mensagem.match(/remarcar.*?(\\d{1,2})h/);\nif (match) {\n  const hora = parseInt(match[1]);\n  const novaData = new Date();\n  novaData.setHours(hora, 0, 0, 0);\n  return [{ novoHorario: novaData.toISOString() }];\n} else {\n  return [{ erro: \"Horário inválido ou não encontrado\" }];\n}"
+      },
+      "id": "9d80ca1c-f47c-431e-84db-7496e1a8098a",
+      "name": "Extrair Novo Horário1",
+      "type": "n8n-nodes-base.function",
+      "typeVersion": 1,
+      "position": [
+        900,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "2096abc7-7ba9-4f0c-a09a-cbc88026ef69",
+              "leftValue": "={{ $json[\"items\"].length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        760,
+        960
+      ],
+      "id": "037bda1b-e7b7-46c9-96b0-e6ca1701dfb1",
+      "name": "If1"
+    },
+    {
+      "parameters": {
+        "url": "https://api.ultramsg.com/INSTANCE_ID_AQUI/messages/chat",
+        "options": {},
+        "headerParametersUi": {
+          "parameter": [
+            {
+              "name": "Content-Type",
+              "value": "application/x-www-form-urlencoded"
+            }
+          ]
+        }
+      },
+      "id": "153c3942-464a-41df-88ae-d16673a55f36",
+      "name": "Escolha outro horario, esse está ocupado1",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 1,
+      "position": [
+        700,
+        720
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        2440,
+        660
+      ],
+      "id": "f6bccfe1-c489-423f-9981-1ea4f37d92d4",
+      "name": "Google Sheets"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "list",
+          "value": ""
+        }
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.6,
+      "position": [
+        960,
+        940
+      ],
+      "id": "97bbbe18-31e0-45ca-92a2-8940260ee809",
+      "name": "Google Sheets1"
+    },
+    {
+      "parameters": {
+        "sheetId": "INSIRA_SEU_SPREADSHEET_ID",
+        "range": "Agendamentos",
+        "options": {}
+      },
+      "id": "0e1b7b6c-032b-4369-838e-83fd6dd68464",
+      "name": "Lookup Evento Antigo",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 2,
+      "position": [
+        2200,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "calendar": "primary",
+        "additionalFields": {}
+      },
+      "id": "13954631-e1b5-48c1-a926-54f260fa5a33",
+      "name": "Excluir Evento Antigo GCal",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1,
+      "position": [
+        2400,
+        440
+      ]
+    },
+    {
+      "parameters": {
+        "sheetId": "INSIRA_SEU_SPREADSHEET_ID",
+        "range": "Agendamentos",
+        "options": {}
+      },
+      "id": "09060928-666b-4b16-b939-87a2b8210e07",
+      "name": "Excluir Linha Planilha",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 2,
+      "position": [
+        2600,
+        440
+      ],
+      "options": {
+        "operation": "delete"
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1140,
+        480
+      ],
+      "id": "068a56dd-5c50-4059-b0bb-6ef1205fb823",
+      "name": "mensagem de boas vindas/instrução"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receber Mensagem WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "mensagem de boas vindas/instrução",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar Eventos Google": {
+      "main": [
+        [
+          {
+            "node": "Cancelar Evento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Cancelar Evento": {
+      "main": [
+        [
+          {
+            "node": "Enviar Confirmação Cancelamento",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Disponibilidade": {
+      "main": [
+        [
+          {
+            "node": "If",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Novo Horário": {
+      "main": [
+        [
+          {
+            "node": "Verificar Disponibilidade",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Criar Evento Google Calendar1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escolha outro horario, esse está ocupado": {
+      "main": [
+        [
+          {
+            "node": "Extrair Novo Horário",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If": {
+      "main": [
+        [
+          {
+            "node": "Lookup Evento Antigo",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escolha outro horario, esse está ocupado",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Switch": {
+      "main": [
+        [
+          {
+            "node": "Buscar Eventos Google",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extrair Novo Horário",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Extrair Novo Horário1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Criar Evento Google Calendar": {
+      "main": [
+        [
+          {
+            "node": "Enviar WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Extrair Novo Horário1": {
+      "main": [
+        [
+          {
+            "node": "Verificar Disponibilidade1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Verificar Disponibilidade1": {
+      "main": [
+        [
+          {
+            "node": "If1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "If1": {
+      "main": [
+        [
+          {
+            "node": "Google Sheets1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Escolha outro horario, esse está ocupado1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escolha outro horario, esse está ocupado1": {
+      "main": [
+        [
+          {
+            "node": "Extrair Novo Horário1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Enviar Confirmação Remarcação",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Sheets1": {
+      "main": [
+        [
+          {
+            "node": "Criar Evento Google Calendar",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Lookup Evento Antigo": {
+      "main": [
+        [
+          {
+            "node": "Excluir Evento Antigo GCal",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Excluir Evento Antigo GCal": {
+      "main": [
+        [
+          {
+            "node": "Excluir Linha Planilha",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Excluir Linha Planilha": {
+      "main": [
+        [
+          {
+            "node": "Criar Evento Google Calendar1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "mensagem de boas vindas/instrução": {
+      "main": [
+        [
+          {
+            "node": "Switch",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "6f13925e-6727-4c66-8687-7a18cf7e2020",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "36517d90e9564da749d33b39e884c1b96571a4d5d998467dc7b8ed2c3d502844"
+  },
+  "id": "AcvtK2dmzbYk04EO",
+  "tags": []
+}
