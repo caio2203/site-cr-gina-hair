@@ -1,7 +1,7 @@
 /* ===== VARIÁVEIS CSS ===== */
 :root {
   /* Paleta de Cores Crigina Hair */
-  --primary-color: #D5B8A2; /* Bege rosé - botões, destaques, hover */
+  --primary-color: #d5b8a2; /* Bege rosé - botões, destaques, hover */
   --secondary-color: #E7CBA6; /* Dourado suave - bordas, hover, ícones, detalhes */
   --accent-color: #E7CBA6; /* Dourado suave - detalhes */
   --background-main: #F7EFE7; /* Champanhe claro - fundo principal */

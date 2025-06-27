@@ -57,7 +57,7 @@
   
   .social-link:hover {
     transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+    box-shadow: 0 5px 15px #d5b8a2;
   }
   
   .social-link i {
@@ -70,4 +70,15 @@
     padding: var(--spacing-sm) 0;
     text-align: center;
     color: #999;
+  }
+  
+  .footer-bottom a {
+    color: inherit;
+    text-decoration: underline;
+    transition: color var(--transition-fast);
+  }
+  
+  .footer-bottom a:visited {
+    color: inherit;
+    text-decoration: underline;
   }
